@@ -1,0 +1,160 @@
+research_specialist_task:
+  description: >
+    conduct COMPREHENSIVE and IN-DEPTH research on the topic: {topic}
+    Your tasks:
+      1. Search for the most current and relevant information from MULTIPLE sources
+      2. Gather EXTENSIVE data from at least 5 reliable sources
+      3. Identify detailed facts, statistics, expert opinions, and case studies
+      4. Organize findings in a well-structured, detailed format
+      5. Ensure information is accurate, up-to-date, and thoroughly cited
+      6. Include diverse perspectives and comprehensive coverage of the topic
+      7. **ALWAYS INCLUDE FULL URLs for all sources used**
+
+  # Provide a detailed research summary with:
+  #   - Key findings (minimum 3 major points with supporting details)
+  #   - Case studies or real-world examples (at least 1)
+  #   - **Reliable sources used with FULL URLs** (minimum 3 sources with full citations)
+
+
+  expected_output: >
+    A comprehensive, DETAILED research summary of 1500+ words.
+    Must include extensive findings, numerous statistics, expert opinions,
+    recent developments, and comprehensive source citations.
+  agent: research_specialist_agent
+  markdown: true
+  output_file: output/research_findings_{research_specialist_model_name}.md
+  create_directory: true
+
+data_analyst_task:
+  description: >
+    Analyze the research findings for the topic: {topic} IN GREAT DETAIL
+
+    Your tasks:
+    1. Review ALL research findings from the previous task thoroughly
+    2. Identify detailed patterns, trends, and key insights with evidence
+    3. Analyze the implications and significance from multiple angles
+    4. Provide expert interpretation with reasoning and examples
+    5. Highlight the most important conclusions with supporting data
+    6. Connect findings to broader contexts and trends
+
+
+    Provide COMPREHENSIVE analysis with:
+    - Key insights and patterns (minimum 8-10 detailed insights)
+    - Trend analysis (examine 5-7 major trends with supporting evidence)
+    - Implications and significance (explore 6-8 implications in depth)
+    - Expert interpretation (provide nuanced analysis with reasoning)
+    - Actionable conclusions (offer 5-7 specific, detailed recommendations)
+
+    ANALYSIS DEPTH:
+    - Go beyond surface-level observations
+    - Explain WHY trends are occurring
+    - Discuss potential consequences and scenarios
+    - Compare and contrast different perspectives
+    - Provide evidence-based reasoning for all claims
+
+    ANALYSIS DEPTH:
+    - Go beyond surface-level observations
+    - Explain WHY trends are occurring
+    - Discuss potential consequences and scenarios
+    - Compare and contrast different perspectives
+    - Provide evidence-based reasoning for all claims
+  expected_output: >
+    A detailed, COMPREHENSIVE analysis report of 1500+ words.
+    Must include in-depth insights, thorough trend analysis,
+    detailed implications, expert interpretation, and actionable conclusions.
+    All analysis must be supported by evidence from the research findings.
+  context: 
+    - research_specialist_task
+  agent: data_analyst_agent
+  markdown: true
+  output_file: output/analysis_report_{data_analyst_model_name}.md
+  create_directory: true
+
+content_writer_task:
+  description: >
+    CREATE A COMPLETE, COMPREHENSIVE FINAL REPORT on the topic: {topic}
+    
+    CRITICAL INSTRUCTIONS:
+    - Write the ACTUAL REPORT CONTENT, not a plan or outline
+    - Your Final Answer MUST BE the complete report text
+    - Do NOT write about how you will write the report
+    - Do NOT provide meta-commentary or revision plans
+    - MINIMUM LENGTH: 3000+ words (approximately 6-8 pages)
+    
+    Your tasks:
+    1. Review both research findings and analysis results in detail
+    2. Write a well-structured, comprehensive report WITH ALL CONTENT
+    3. Provide IN-DEPTH analysis with multiple examples and case studies
+    4. Include specific statistics, data points, and expert quotes
+    5. Elaborate on implications with detailed reasoning
+    6. Cite all sources appropriately with full context **with FULL URLs** (minimum 10-15 sources)
+
+    The FINISHED report must include (with minimum lengths):
+    - Executive Summary: 200-300 words summarizing key points
+    - Introduction: 400-500 words providing context and background
+    - Main Findings: 800-1000 words with detailed research results
+      * Include specific statistics with sources
+      * Provide multiple examples and case studies
+      * Break down findings by categories or sectors
+    - Analysis and Insights: 800-1000 words with deep analysis
+      * Explore implications in detail
+      * Discuss multiple perspectives
+      * Connect findings to broader trends
+    - Conclusions and Recommendations: 400-500 words
+      * Provide actionable recommendations
+      * Discuss future outlook
+      * Address potential challenges
+    - Sources and References: Complete list with full citations **with FULL URLs** (minimum 10-15 sources)
+    
+    STYLE REQUIREMENTS:
+    - Use clear headings and subheadings
+    - Include bullet points for key information
+    - Add transition paragraphs between sections
+    - Provide context for all claims and statistics
+    - Write in a professional, analytical tone
+  expected_output: >
+    A COMPLETE, PUBLICATION-READY comprehensive report of 3000+ words.
+    The report must be substantive, detailed, and thoroughly researched.
+    Each section should be fully developed with specific examples and data.
+    The output must be the finished document, not a plan or outline.
+  context: 
+    - research_specialist_task
+    - data_analyst_task
+  output_file: output/final_report_{content_writer_model_name}.md
+  agent: content_writer_agent
+
+translator_task:
+  description: >
+    TRANSLATE THE COMPLETE ENGLISH REPORT INTO KOREAN
+    
+    CRITICAL INSTRUCTIONS:
+    - You MUST translate ALL content from English to Korean
+    - Do NOT return the English text
+    - Do NOT include ANY meta-commentary, thinking process, or explanations
+    - Do NOT include "Ok, I'm ready", "Thought:", or similar statements
+    - Your Final Answer MUST BE ONLY the complete Korean translation
+    - NO code blocks around the translation - output raw markdown
+    
+    Your tasks:
+    1. Read the complete English report from the previous task
+    2. Translate ALL sections into natural, fluent Korean
+    3. Preserve structure (headings, lists, tables), numbers, units, and links
+    4. Use appropriate tone (formal 존댓말 for professional report)
+    5. Ensure terminology consistency throughout
+    6. Add a terminology glossary at the end (10-20 key terms with EN/KO pairs)
+  expected_output: >
+    ONLY the complete Korean translation in raw markdown format.
+    NO thinking process, NO meta-commentary, NO code blocks.
+    Start directly with "# [Korean title]" and end with the glossary.
+    The output must include:
+      - All sections fully translated into Korean (not English)
+      - Preserved formatting and structure
+      - Terminology glossary at the end (English → Korean)
+  agent: translator_agent
+  output_file: output/final_report_ko_{translator_model_name}.md
+  create_directory: true
+  markdown: true
+  context:
+    - content_writer_task
+  depends_on:
+    - content_writer_task

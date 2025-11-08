@@ -1,0 +1,13 @@
+[project]
+name = "02-crewai-hello"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "crewai>=0.203.0",
+    "crewai-tools>=0.76.0",
+    "dotenv>=0.9.9",
+    "streamlit>=1.50.0",
+    "tools>=1.0.6",
+]
