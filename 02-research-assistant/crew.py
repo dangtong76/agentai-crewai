@@ -25,31 +25,49 @@ timestamp = datetime.now().strftime("%Y%m%d-%H%M")  # 예: 20251013-1430
 
 
 # 모델 생성 함수
+# def create_agent_with_model(config, model_name, model_url, tools):
+#     """
+#     모델 URL 유무에 따라 온라인/오프라인 모델 자동 선택
+#     - model_url 있음 → LLM 객체 생성 (오프라인)
+#     - model_url 없음 → 문자열 전달 (온라인, 자동 감지)
+#     """
+#     agent_kwargs = {
+#         "config": config,
+#         "tools": tools
+#     }
+#     if model_url:
+#         # 오프라인 모델: base_url 지정
+#         agent_kwargs["llm"] = LLM(
+#             model=model_name, 
+#             base_url=model_url
+#         )
+#     else:
+#         # 온라인 모델: 자동 감지
+#         agent_kwargs["model"] = model_name
+    
+#     return Agent(**agent_kwargs)
+
 def create_agent_with_model(config, model_name, model_url, tools):
     """
     모델 URL 유무에 따라 온라인/오프라인 모델 자동 선택
     - model_url 있음 → LLM 객체 생성 (오프라인)
-    - model_url 없음 → 문자열 전달 (온라인, 자동 감지)
+    - model_url 없음 → LLM 객체 생성 (온라인, 자동 감지)
     """
-    agent_kwargs = {
-        "config": config,
-        "tools": tools
-    }
     if model_url:
         # 오프라인 모델: base_url 지정
-        agent_kwargs["llm"] = LLM(
-            model=model_name, 
-            base_url=model_url
-        )
+        llm = LLM(model=model_name, base_url=model_url)
     else:
         # 온라인 모델: 자동 감지
-        agent_kwargs["model"] = model_name
+        llm = LLM(model=model_name)
     
-    return Agent(**agent_kwargs)
+    return Agent(
+        config=config,
+        llm=llm,
+        tools=tools
+    )
 
-
+    
 @CrewBase
-
 class ResearchCrew:
     
 

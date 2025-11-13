@@ -1,25 +1,19 @@
 research_specialist_task:
   description: >
-    conduct COMPREHENSIVE and IN-DEPTH research on the topic: {topic}
-    Your tasks:
-      1. Search for the most current and relevant information from MULTIPLE sources
-      2. Gather EXTENSIVE data from at least 5 reliable sources
-      3. Identify detailed facts, statistics, expert opinions, and case studies
-      4. Organize findings in a well-structured, detailed format
-      5. Ensure information is accurate, up-to-date, and thoroughly cited
-      6. Include diverse perspectives and comprehensive coverage of the topic
-      7. **ALWAYS INCLUDE FULL URLs for all sources used**
+    주제: {topic} 에 대해 **포괄적이고 심층적인 연구를 수행**합니다.
 
-  # Provide a detailed research summary with:
-  #   - Key findings (minimum 3 major points with supporting details)
-  #   - Case studies or real-world examples (at least 1)
-  #   - **Reliable sources used with FULL URLs** (minimum 3 sources with full citations)
-
+    수행할 작업:
+      1. 여러 출처에서 최신의 관련 정보 검색
+      2. 신뢰할 수 있는 최소 5개 이상의 출처에서 데이터 수집
+      3. 구체적인 사실, 통계, 전문가 의견, 사례 연구를 식별
+      4. 결과를 잘 구조화된 상세한 형식으로 정리
+      5. 모든 정보의 정확성, 최신성, 인용의 완전성 보장
+      6. 다양한 관점과 폭넓은 주제 범위를 포함
+      7. **모든 사용한 출처의 전체 URL 반드시 포함**
 
   expected_output: >
-    A comprehensive, DETAILED research summary of 1500+ words.
-    Must include extensive findings, numerous statistics, expert opinions,
-    recent developments, and comprehensive source citations.
+    최소 1500단어 이상의 상세하고 포괄적인 연구 요약문.  
+    풍부한 사실, 통계, 전문가 의견, 최신 동향, 그리고 인용 출처를 반드시 포함해야 함.
   agent: research_specialist_agent
   markdown: true
   output_file: output/research_findings_{research_specialist_model_name}.md
@@ -27,42 +21,33 @@ research_specialist_task:
 
 data_analyst_task:
   description: >
-    Analyze the research findings for the topic: {topic} IN GREAT DETAIL
+    주제: {topic} 에 대한 연구 결과를 **매우 자세하게 분석**합니다.
 
-    Your tasks:
-    1. Review ALL research findings from the previous task thoroughly
-    2. Identify detailed patterns, trends, and key insights with evidence
-    3. Analyze the implications and significance from multiple angles
-    4. Provide expert interpretation with reasoning and examples
-    5. Highlight the most important conclusions with supporting data
-    6. Connect findings to broader contexts and trends
+    수행할 작업:
+    1. 이전 연구 결과를 철저히 검토
+    2. 증거를 기반으로 세부 패턴, 트렌드, 핵심 인사이트 도출
+    3. 다양한 관점에서 시사점과 의미 분석
+    4. 근거와 예시를 포함한 전문가 수준의 해석 제공
+    5. 데이터로 뒷받침된 핵심 결론 강조
+    6. 연구 내용을 넓은 맥락과 주요 흐름에 연결
 
+    분석 시 포함해야 할 내용:
+    - 핵심 인사이트 및 패턴 (최소 8~10개)
+    - 트렌드 분석 (5~7개의 주요 트렌드 + 증거 포함)
+    - 시사점 및 의미 (6~8개의 심층 분석)
+    - 전문가 해석 (논리적 근거를 포함한 정성적 분석)
+    - 실행 가능한 결론 (5~7개의 구체적 권장 사항)
 
-    Provide COMPREHENSIVE analysis with:
-    - Key insights and patterns (minimum 8-10 detailed insights)
-    - Trend analysis (examine 5-7 major trends with supporting evidence)
-    - Implications and significance (explore 6-8 implications in depth)
-    - Expert interpretation (provide nuanced analysis with reasoning)
-    - Actionable conclusions (offer 5-7 specific, detailed recommendations)
-
-    ANALYSIS DEPTH:
-    - Go beyond surface-level observations
-    - Explain WHY trends are occurring
-    - Discuss potential consequences and scenarios
-    - Compare and contrast different perspectives
-    - Provide evidence-based reasoning for all claims
-
-    ANALYSIS DEPTH:
-    - Go beyond surface-level observations
-    - Explain WHY trends are occurring
-    - Discuss potential consequences and scenarios
-    - Compare and contrast different perspectives
-    - Provide evidence-based reasoning for all claims
+    분석의 깊이:
+    - 단순한 관찰 수준을 넘어 원인과 결과를 설명
+    - 트렌드가 발생하는 이유를 분석
+    - 잠재적 결과와 시나리오 논의
+    - 상이한 관점 비교 및 대조
+    - 모든 주장에 대해 증거 기반의 논리 제시
   expected_output: >
-    A detailed, COMPREHENSIVE analysis report of 1500+ words.
-    Must include in-depth insights, thorough trend analysis,
-    detailed implications, expert interpretation, and actionable conclusions.
-    All analysis must be supported by evidence from the research findings.
+    최소 1500단어 이상의 세밀하고 포괄적인 분석 보고서.  
+    심층적인 인사이트, 트렌드 분석, 시사점, 전문가 해석, 실행 가능한 결론을 포함하며  
+    모든 분석은 연구 결과의 근거를 기반으로 해야 함.
   context: 
     - research_specialist_task
   agent: data_analyst_agent
@@ -72,89 +57,93 @@ data_analyst_task:
 
 content_writer_task:
   description: >
-    CREATE A COMPLETE, COMPREHENSIVE FINAL REPORT on the topic: {topic}
+    주제: {topic} 에 대해 **완전하고 종합적인 최종 보고서를 작성**합니다.
     
-    CRITICAL INSTRUCTIONS:
-    - Write the ACTUAL REPORT CONTENT, not a plan or outline
-    - Your Final Answer MUST BE the complete report text
-    - Do NOT write about how you will write the report
-    - Do NOT provide meta-commentary or revision plans
-    - MINIMUM LENGTH: 3000+ words (approximately 6-8 pages)
-    
-    Your tasks:
-    1. Review both research findings and analysis results in detail
-    2. Write a well-structured, comprehensive report WITH ALL CONTENT
-    3. Provide IN-DEPTH analysis with multiple examples and case studies
-    4. Include specific statistics, data points, and expert quotes
-    5. Elaborate on implications with detailed reasoning
-    6. Cite all sources appropriately with full context **with FULL URLs** (minimum 10-15 sources)
+    중요 지침:
+    - 계획서나 개요가 아닌 **실제 보고서 본문**을 작성해야 함
+    - 최종 결과물은 반드시 완성된 보고서여야 함
+    - “어떻게 작성할 것이다” 등의 메타 코멘트 금지
+    - 최소 분량: 3000단어 이상 (약 6~8페이지)
 
-    The FINISHED report must include (with minimum lengths):
-    - Executive Summary: 200-300 words summarizing key points
-    - Introduction: 400-500 words providing context and background
-    - Main Findings: 800-1000 words with detailed research results
-      * Include specific statistics with sources
-      * Provide multiple examples and case studies
-      * Break down findings by categories or sectors
-    - Analysis and Insights: 800-1000 words with deep analysis
-      * Explore implications in detail
-      * Discuss multiple perspectives
-      * Connect findings to broader trends
-    - Conclusions and Recommendations: 400-500 words
-      * Provide actionable recommendations
-      * Discuss future outlook
-      * Address potential challenges
-    - Sources and References: Complete list with full citations **with FULL URLs** (minimum 10-15 sources)
-    
-    STYLE REQUIREMENTS:
-    - Use clear headings and subheadings
-    - Include bullet points for key information
-    - Add transition paragraphs between sections
-    - Provide context for all claims and statistics
-    - Write in a professional, analytical tone
+    수행할 작업:
+    1. 연구 및 분석 결과를 모두 검토
+    2. 구조화된 완성 보고서 작성 (모든 내용 포함)
+    3. 사례와 예시를 통한 심층 분석 포함
+    4. 구체적인 통계, 데이터, 전문가 인용 추가
+    5. 시사점과 의미를 논리적으로 확장
+    6. 모든 출처에 **전체 URL 포함** (최소 10~15개)
+
+    최종 보고서에는 다음 섹션이 포함되어야 함:
+    - **요약(Executive Summary)**: 200~300단어  
+      주요 내용을 간결히 정리
+    - **서론(Introduction)**: 400~500단어  
+      배경과 맥락 설명
+    - **주요 연구 결과(Main Findings)**: 800~1000단어  
+      * 구체적인 통계 및 출처 포함  
+      * 여러 사례와 예시 포함  
+      * 분야 또는 카테고리별로 정리  
+    - **분석 및 인사이트(Analysis and Insights)**: 800~1000단어  
+      * 시사점 심층 탐구  
+      * 다양한 관점 논의  
+      * 연구 결과를 사회적/산업적 맥락에 연결  
+    - **결론 및 제언(Conclusions and Recommendations)**: 400~500단어  
+      * 실행 가능한 권장사항  
+      * 향후 전망 및 도전 과제  
+    - **출처(References)**:  
+      전체 인용 목록 **전체 URL 포함** (최소 10~15개)
+
+    작성 스타일 지침:
+    - 명확한 제목과 부제목 사용
+    - 핵심 정보는 불릿 포인트로 요약
+    - 섹션 간 연결 문단 포함
+    - 모든 통계와 주장의 맥락 제공
+    - 전문적이고 분석적인 어조 유지
   expected_output: >
-    A COMPLETE, PUBLICATION-READY comprehensive report of 3000+ words.
-    The report must be substantive, detailed, and thoroughly researched.
-    Each section should be fully developed with specific examples and data.
-    The output must be the finished document, not a plan or outline.
+    최소 3000단어 이상의 완전한 보고서 원문.  
+    보고서는 실질적이고 풍부한 내용으로 구성되어야 하며,  
+    각 섹션은 구체적 데이터와 사례를 포함해야 함.  
+    최종 출력은 계획이 아닌 **완성된 보고서 본문**이어야 함.
   context: 
     - research_specialist_task
     - data_analyst_task
-  output_file: output/final_report_{content_writer_model_name}.md
   agent: content_writer_agent
+  markdown: true
+  output_file: output/final_report_{content_writer_model_name}.md
+  create_directory: true
 
+  
 translator_task:
   description: >
-    TRANSLATE THE COMPLETE ENGLISH REPORT INTO KOREAN
+    완성된 영어 보고서를 **한국어로 번역**합니다.
     
-    CRITICAL INSTRUCTIONS:
-    - You MUST translate ALL content from English to Korean
-    - Do NOT return the English text
-    - Do NOT include ANY meta-commentary, thinking process, or explanations
-    - Do NOT include "Ok, I'm ready", "Thought:", or similar statements
-    - Your Final Answer MUST BE ONLY the complete Korean translation
-    - NO code blocks around the translation - output raw markdown
-    
-    Your tasks:
-    1. Read the complete English report from the previous task
-    2. Translate ALL sections into natural, fluent Korean
-    3. Preserve structure (headings, lists, tables), numbers, units, and links
-    4. Use appropriate tone (formal 존댓말 for professional report)
-    5. Ensure terminology consistency throughout
-    6. Add a terminology glossary at the end (10-20 key terms with EN/KO pairs)
+    중요 지침:
+    - 모든 영어 내용을 완전히 한국어로 번역해야 함
+    - 영어 원문을 함께 출력하지 말 것
+    - 사고 과정, 주석, 설명 포함 금지
+    - “생각 중입니다”, “좋아요, 준비됐어요” 등의 문구 금지
+    - 출력은 반드시 완전한 한국어 번역문만 포함해야 함
+    - 코드 블록(```` ``` ````)으로 감싸지 말고 원시 마크다운으로 출력
+
+    수행할 작업:
+    1. 이전 단계의 영어 보고서 전체 읽기
+    2. 모든 섹션을 자연스럽고 유려한 한국어로 번역
+    3. 제목, 리스트, 표, 숫자, 단위, 링크 등 구조 유지
+    4. 전문 보고서에 맞는 격식체(존댓말) 사용
+    5. 문서 전체에서 용어 일관성 유지
+    6. 문서 끝에 용어집(영→한 10~20개 주요 용어) 추가
   expected_output: >
-    ONLY the complete Korean translation in raw markdown format.
-    NO thinking process, NO meta-commentary, NO code blocks.
-    Start directly with "# [Korean title]" and end with the glossary.
-    The output must include:
-      - All sections fully translated into Korean (not English)
-      - Preserved formatting and structure
-      - Terminology glossary at the end (English → Korean)
+    영어 원문 없이 **오직 완전한 한국어 번역문만** 출력.  
+    사고 과정, 주석, 코드 블록은 금지.  
+    출력은 반드시 `# [한국어 제목]` 으로 시작하고 용어집으로 끝나야 함.  
+    포함 내용:
+      - 모든 섹션의 완전한 한국어 번역
+      - 원문 형식 및 구조 유지
+      - 영→한 용어집(10~20개) 포함
   agent: translator_agent
   output_file: output/final_report_ko_{translator_model_name}.md
   create_directory: true
   markdown: true
   context:
-    - content_writer_task
+  - content_writer_task
   depends_on:
-    - content_writer_task
+  - content_writer_task
