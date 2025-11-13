@@ -11,5 +11,6 @@ wheels/
 .python-version
 uv.lock
 **/.env
-**/output/.md
-**/.md
+02-research-assistant/output/
+notebooks/*.db
+notebooks/*.txt
