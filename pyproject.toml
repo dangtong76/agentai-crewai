@@ -8,6 +8,7 @@ dependencies = [
     "crewai>=1.4.1",
     "crewai-tools>=1.4.1",
     "dotenv>=0.9.9",
+    "firecrawl-py>=4.8.0",
     "litellm>=1.79.3",
     "streamlit>=1.51.0",
     "tools>=1.0.10",

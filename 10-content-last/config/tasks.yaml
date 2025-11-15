@@ -1,0 +1,27 @@
+seo_expert_task:
+  description: >
+    블로그 글의 SEO 효율성을 분석하고 다음 내용을 제공하시오:
+            
+    1. SEO 점수(0~10점):
+        - 키워드 최적화
+        - 제목(타이틀) 효과성
+        - 콘텐츠 구조 (헤더, 문단 구성)
+        - 콘텐츠 길이와 품질
+        - 가독성
+        - 검색 의도와의 일치 정도
+
+    2. 점수에 대한 명확한 근거:
+        - 점수(Score)가 높을 경우: 주요 강점
+        - 점수(Score)가 낮을 경우: 반드시 개선해야 할 치명적 약점
+        - 점수(Score)에 가장 큰 영향을 준 핵심 요소
+
+    분석할 블로그 글: {blog_post}
+    타겟 주제: {topic}
+
+  expected_output: >
+    Score 객체 (Pydantic 기반)로 출력:
+    - score: SEO 품질을 0~10 사이 정수로 평가
+    - reason: 점수에 영향을 준 핵심 요인을 설명한 문자열
+
+  agent: seo_expert_agent
+  output_pydantic: Score

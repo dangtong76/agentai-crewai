@@ -14,3 +14,4 @@ uv.lock
 02-research-assistant/output/
 notebooks/*.db
 notebooks/*.txt
+.DS_Store
