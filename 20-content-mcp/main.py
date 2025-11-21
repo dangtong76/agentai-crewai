@@ -2,10 +2,10 @@ from crewai.flow.flow import Flow, listen, start, router, and_, or_
 from pydantic import BaseModel
 from crewai.agent import Agent
 from crewai import LLM
-from tools import web_search_tool
 from typing import List
 from dotenv import load_dotenv
 from content_eval_crew import ContentEvalCrew
+from mcp_client import firecrawl_web_search
 
 
 load_dotenv()
@@ -69,13 +69,18 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         print(f"조사시작: {self.state.topic} 에 대해 조사를 시작합니다.")
         researcher = Agent(                                        
             role="조사 전문가",
-            backstory="당신은 조사 전문가입니다. 조사 결과를 제공합니다.",
+            backstory="당신은 조사 전문가입니다. firecrawl MCP를 사용하여 조사 결과를 제공합니다.",
             goal=f"{self.state.topic} 에 대해 가능한 유용한 정보에 찾아서 조사를 시작합니다.",
-            tools=[web_search_tool],
+            tools=[firecrawl_web_search],
         )
         self.state.research = researcher.kickoff(
             f"{self.state.topic} 에 대해 가능한 유용한 정보에 찾아서 조사를 시작합니다."
-        )                    
+        )           
+        
+
+        print("================================================$$$$$$$$$$$$$")
+        print(self.state.research)
+        print("================================================")
     
     @router(conduct_research)
     def conduct_research_router(self):
@@ -98,11 +103,13 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
 
         blog_post = self.state.blog_post
 
-        llm = LLM(model="openai/gpt-4o-mini", response_format=BlogPost)
+        llm = LLM(model="openai/gpt-5.1")
 
         if blog_post is None:            
             result = llm.call(f"""
-            다음의 research 결과를 바탕으로 {self.state.topic} 에 대한 블로그 포스트를 한글로 작성하세요
+            다음의 {self.state.research} 결과를 바탕으로 {self.state.topic} 에 대한 블로그 포스트를 한글로 작성하세요.
+            작성할 경우, {self.state.research} 에 있는 인터넷 자료의 출처(Reference)를 반드시 명시하라.  
+            출처는 실제로 존재하는 페이지 링크(URL)여야 하며, "출처 없음", "예시 링크" 등은 허용되지 않는다.
 
             작성한 포스트는 반드시 json 형식으로 작성해줘.
             
@@ -118,7 +125,10 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
             """)
         else:                           
             result = llm.call(f"""
-            니가 작성한 포스트는 {self.state.score.reason} 때문에 SEO(검색엔진 최적화)점수가 좋지 않아, {self.state.topic} 에 대한 블로그 포스트를 개선해서 한글로 작성해줘.
+            니가 작성한 포스트는 {self.state.score.reason} 때문에 SEO(검색엔진 최적화)점수가 좋지 않아, 
+            {self.state.topic} 에 대한 블로그 포스트를 개선해서 한글로 작성해줘.
+            작성할 경우, {self.state.research} 에 있는 인터넷 자료의 출처(Reference)를 반드시 명시하라.  
+            출처는 실제로 존재하는 페이지 링크(URL)여야 하며, "출처 없음", "예시 링크" 등은 허용되지 않는다.
 
             작성한 포스트는 반드시 json 형식으로 작성해줘.
             
