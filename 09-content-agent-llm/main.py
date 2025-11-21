@@ -112,7 +112,7 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
             {self.state.blog_post.model_dump_json()}
             <blog_post>
 
-            다음의 research 결과를 하용해서 작성해.
+            다음의 research 결과를 이용해서 작성해.
 
             <research>
             {self.state.research}

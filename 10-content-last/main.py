@@ -5,7 +5,7 @@ from crewai import LLM
 from tools import web_search_tool
 from typing import List
 from dotenv import load_dotenv
-from seo_crew import SeoCrew # 6
+from content_eval_crew import ContentEvalCrew
 
 
 load_dotenv()
@@ -13,7 +13,8 @@ load_dotenv()
 class BlogPost(BaseModel):
     title: str
     subtitle: str   
-    sections: List[str]
+    content: str
+
 
 class TweetPost(BaseModel):
     content: str
@@ -36,7 +37,7 @@ class ContentPipelineState(BaseModel):
 
     # internal state
     max_characters: int = 0
-    score: int = 0
+    # score: int = 0
     research: str = ""
     score: Score | None = None
 
@@ -100,16 +101,32 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         llm = LLM(model="openai/gpt-4o-mini", response_format=BlogPost)
 
         if blog_post is None:            
-            self.state.blog_post = llm.call(f"""
-            다음의 research 결과를 바탕으로 {self.state.topic} 에 대한 블로그 포스트를 작성하세요
+            result = llm.call(f"""
+            다음의 research 결과를 바탕으로 {self.state.topic} 에 대한 블로그 포스트를 한글로 작성하세요
+
+            작성한 포스트는 반드시 json 형식으로 작성해줘.
+            
+            <json_format>
+                "title": "제목",
+                "subtitle": "부제목",
+                "content": "내용"
+            </json_format>
             
             <research>
             {self.state.research}
             </research>
             """)
         else:                           
-            self.state.blog_post = llm.call(f"""
-            니가 작성한 포스트는 {self.state.score.reason} 때문에 SEO(검색엔진 최적화)점수가 좋지 않아, {self.state.topic} 에 대한 블로그 포스트를 개선해서 작성해줘.
+            result = llm.call(f"""
+            니가 작성한 포스트는 {self.state.score.reason} 때문에 SEO(검색엔진 최적화)점수가 좋지 않아, {self.state.topic} 에 대한 블로그 포스트를 개선해서 한글로 작성해줘.
+
+            작성한 포스트는 반드시 json 형식으로 작성해줘.
+            
+            <json_format>
+                "title": "제목",
+                "subtitle": "부제목",
+                "content": "내용"
+            </json_format>
             
             <blog_post>
             {self.state.blog_post.model_dump_json()}
@@ -122,11 +139,10 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
             </research>
             """)
             
-
-        if blog_post == "":             
-            print("포스트 신규작성.")
-        else:                          
-            print("포스트 개선필요.")
+        print("================================================")
+        print(result)
+        print("================================================")
+        self.state.blog_post = result
 
     
     @listen(or_("make_tweet_post", "rewrite_tweet_post"))
@@ -139,17 +155,31 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         llm = LLM(model="openai/gpt-4o-mini", response_format=TweetPost) # 2.TweetPost, Tweet 으로 변경 ↓
 
         if tweet_post is None:            
-            self.state.tweet_post = llm.call(f"""
-            다음의 research 결과를 바탕으로 {self.state.topic} 에 대한 Tweet 포스트를 작성하세요
+            result= llm.call(f"""
+            다음의 research 결과를 바탕으로 {self.state.topic} 에 대한 Tweet 포스트 내용과 해시태그를 한글로 작성하세요
+
+            작성한 포스트는 반드시 json 형식으로 작성해줘.
+            
+            <json_format>
+                "content": "내용",
+                "hashtags": "해시태그"
+            </json_format>
             
             <research>
             {self.state.research}
             </research>
             """)
         else:                           
-            self.state.tweet_post = llm.call(f"""
+            result = llm.call(f"""
             니가 작성한 Tweet 포스트는 {self.state.score.reason} 때문에 화재성 점수가 좋지 않아,
-            {self.state.topic} 에 대한 Tweet 포스트를 개선해서 작성해줘.
+            {self.state.topic} 에 대한 Tweet 포스트와 해시태그를 개선해서 한글로 작성해줘.
+
+            작성한 포스트는 반드시 json 형식으로 작성해줘.
+            
+            <json_format>
+                "content": "내용",
+                "hashtags": "해시태그"
+            </json_format>
             
             <tweet_post>
             {self.state.tweet_post.model_dump_json()}
@@ -161,12 +191,11 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
             {self.state.research}
             </research>
             """)
-            
+        print("================================================")
+        print(result)
+        print("================================================")
+        self.state.tweet_post = result
 
-        if tweet_post == "":             
-            print("포스트 신규작성.")
-        else:                          
-            print("포스트 개선필요.")
 
     
     @listen(or_("make_linkedin_post", "rewrite_linkedin_post")) 
@@ -179,40 +208,52 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         llm = LLM(model="openai/gpt-4o-mini", response_format=LinkedinPost) # 4.LinkedinPost, Linkedin 으로 변경 ↓
 
         if linkedin_post is None:            
-            self.state.linkedin_post = llm.call(f"""
-            다음의 research 결과를 바탕으로 {self.state.topic} 에 대한 Linkedin 포스트를 작성하세요
+            result = llm.call(f"""
+            다음의 research 결과를 바탕으로 {self.state.topic} 에 대한 Linkedin 포스트를 한글로 작성하세요. 
+            작성한 포스트는 반드시 json 형식으로 작성해줘.
+            
+            <json_format>
+                "hook": "훅",
+                "content": "내용",
+                "call_to_action": "호출 액션"
+            </json_format>
             
             <research>
             {self.state.research}
             </research>
             """)
         else:                           
-            self.state.linkedin_post = llm.call(f"""
+            result = llm.call(f"""
             니가 작성한 Linkedin 포스트는 {self.state.score.reason} 때문에 화재성 점수가 좋지 않아,
-            {self.state.topic} 에 대한 Linkedin 포스트를 개선해서 작성해줘.
-            
+            {self.state.topic} 에 대한 Linkedin 포스트를 개선해서 한글로 작성해줘.
+            작성한 포스트는 반드시 json 형식으로 작성해줘.
+
+            <json_format>
+                "hook": "훅",
+                "content": "내용",
+                "call_to_action": "호출 액션"
+            </json_format>
+
             <linkedin_post>
             {self.state.linkedin_post.model_dump_json()}
             <linkedin_post>
 
-            다음의 research 결과를 하용해서 작성해.
+            다음의 research 결과를 이용해서 작성해.
 
             <research>
             {self.state.research}
             </research>
             """)
             
+        print(result)
+        self.state.linkedin_post = result
 
-        if linkedin_post == "":             
-            print("포스트 신규작성.")
-        else:                          
-            print("포스트 개선필요.")
 
     @listen(handle_make_blog_post)
     def check_seo(self):
         print(f"블로그 포스트 SEO 체크: {self.state.topic} 에 대해 SEO 체크를 시작합니다.")
         result = (
-            SeoCrew().crew.kickoff(  #7
+            ContentEvalCrew().seo_crew().kickoff(  #7
                 inputs={
                     "blog_post": self.state.blog_post.model_dump_json(),
                     "topic": self.state.topic,
@@ -222,17 +263,33 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
 
         self.state.score = result.pydantic
 
-        print(self.state.blog_post)
-        print("================================================")
-        print(self.state.research)
 
     
     @listen(or_(handle_make_tweet_post, handle_make_linkedin_post))
     def check_virality(self):
         print(f"트윗 또는 링크드인 포스트 화제성 체크: {self.state.topic} 에 대해 화제성 체크를 시작합니다.")
-        print(self.state.tweet_post)    
-        print("================================================")
-        print(self.state.linkedin_post)
+        if self.state.content_type == "tweet":
+            result = (
+                ContentEvalCrew().virality_crew().kickoff(  #7
+                    inputs={
+                        "content_type": self.state.content_type,
+                        "content": self.state.tweet_post.model_dump_json(),
+                        "topic": self.state.topic,
+                    }
+                )
+            )
+        elif self.state.content_type == "linkedin":
+            result = (
+                ContentEvalCrew().virality_crew().kickoff(  #7
+                    inputs={
+                        "content_type": self.state.content_type,
+                        "content": self.state.linkedin_post.model_dump_json(),
+                        "topic": self.state.topic,
+                    }
+                )
+            )
+
+        self.state.score = result.pydantic
 
 
     @router(or_(check_seo, check_virality)) 
@@ -240,7 +297,7 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         content_type = self.state.content_type 
         score = self.state.score 
 
-        if score  > 8:            
+        if score.score  > 7:            
             return "content_passed"
         else:
             if content_type == "blog":
@@ -260,9 +317,11 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
 flow = ContentPipelineFlow()
 
 # flow.plot() 
+
+
 flow.kickoff( 
     inputs={
-        "content_type": "linkedin",
+        "content_type": "blog",
         "topic": "AI and Job Security",
     }
 )

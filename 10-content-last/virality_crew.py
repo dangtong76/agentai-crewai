@@ -8,19 +8,20 @@ class Score(BaseModel):
     score: int
     reason: str
 
+
 @CrewBase
-class SeoCrew:
+class ViralityCrew:
 
     @agent
-    def seo_expert_agent(self):
+    def virality_expert_agent(self):
         return Agent(
-            config=self.agents_config["seo_expert_agent"]
+            config=self.agents_config["virality_expert_agent"]
         )
 
     @task
-    def seo_expert_task(self):
+    def virality_expert_task(self):
         return Task(
-            config=self.tasks_config["seo_expert_task"]
+            config=self.tasks_config["virality_expert_task"]
         )
     
     @crew

@@ -27,7 +27,7 @@ class FirstFlow(Flow[MyState]):
         print('CrewAI')
     
     @router(final_step)
-    def route(self):
+    def final_step_router(self):
         if MyState.user_id :
             return 'admin' # emit event 'even'
         elif MyState.user_id == False:
