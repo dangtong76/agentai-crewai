@@ -4,8 +4,8 @@ from pydantic import BaseModel
 
 
 class Score(BaseModel):
-    score: int
-    reason: str
+    score: int = 0
+    reason: str = ""
 
 @CrewBase
 class ContentEvalCrew:

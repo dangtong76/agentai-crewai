@@ -12,7 +12,7 @@ FIRECRAWL_MCP_PARAMS = {
 
 
 @tool("firecrawl_news_search")
-def firecrawl_web_search(query: str, limit: int = 3):
+def firecrawl_news_search(query: str, limit: int = 3):
     """
     Firecrawl MCP의 firecrawl_search를 호출해서 'news' 소스에서 검색 결과를 가져옵니다.
     """

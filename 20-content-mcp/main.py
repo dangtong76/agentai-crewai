@@ -5,7 +5,7 @@ from crewai import LLM
 from typing import List
 from dotenv import load_dotenv
 from content_eval_crew import ContentEvalCrew
-from mcp_client import firecrawl_web_search
+from mcp_client import firecrawl_web_search, firecrawl_news_search
 
 
 load_dotenv()
@@ -46,6 +46,7 @@ class ContentPipelineState(BaseModel):
     tweet_post: TweetPost | None = None
     linkedin_post: LinkedinPost | None = None
 
+
 class ContentPipelineFlow(Flow[ContentPipelineState]):
 
     @start()
@@ -71,7 +72,7 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
             role="조사 전문가",
             backstory="당신은 조사 전문가입니다. firecrawl MCP를 사용하여 조사 결과를 제공합니다.",
             goal=f"{self.state.topic} 에 대해 가능한 유용한 정보에 찾아서 조사를 시작합니다.",
-            tools=[firecrawl_web_search],
+            tools=[firecrawl_web_search,firecrawl_news_search],
         )
         self.state.research = researcher.kickoff(
             f"{self.state.topic} 에 대해 가능한 유용한 정보에 찾아서 조사를 시작합니다."

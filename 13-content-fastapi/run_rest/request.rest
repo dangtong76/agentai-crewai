@@ -1,0 +1,8 @@
+POST http://localhost:8000/content/blog
+Content-Type: application/json
+
+{
+    "topic": "AI and Job Security",
+    "content_length": 800,
+    "instruction": "Please write a blog post about the latest trends in AI and job security."
+}
